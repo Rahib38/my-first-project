@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import validator from "validator";
 import {
   Guardian,
   LocalGuardian,
@@ -11,74 +12,198 @@ const usernameSchema = new Schema<UserName>({
     type: String,
     required: [
       true,
-      "first name chara hobe na vhai",
-    ] /* ekhane protita field er modde evabe custom meassage dite hobe */,
+      "First name is required. Please provide a valid first name.",
+    ],
+    maxlength: [20, "first Name can be more than 20"],
+    trim: true,
+    minlength: [5, "first Name can be more  less than 5"],
+    validate: {
+      validator: function (value: string) {
+        const firstName = value.charAt(0).toUpperCase() + value.slice(1);
+        return firstName === value;
+      },
+      message: "{VALUE} is not in captalize format",
+    },
   },
   middleName: {
     type: String,
   },
   lastName: {
     type: String,
-    required: true,
+    required: [
+      true,
+      "Last name is required. Please provide a valid last name.",
+    ],
+    validate: {
+      validator: (value: string) => validator.isAlpha(value),
+      message: `{VALUE} is not valid`,
+    },
   },
 });
 
 const guardianSchema = new Schema<Guardian>({
-  fatherName: { type: String, required: true },
-  fatherContactNo: { type: String, required: true },
-  fatherOccuption: { type: String, required: true },
-  motherName: { type: String, required: true },
-  motherContactNo: { type: String, required: true },
-  motherOccuption: { type: String, required: true },
+  fatherName: {
+    type: String,
+    required: [true, "Father's name is required. Please provide a valid name."],
+  },
+  fatherContactNo: {
+    type: String,
+    required: [
+      true,
+      "Father's contact number is required. Please provide a valid number.",
+    ],
+  },
+  fatherOccuption: {
+    type: String,
+    required: [
+      true,
+      "Father's occupation is required. Please provide a valid occupation.",
+    ],
+  },
+  motherName: {
+    type: String,
+    required: [true, "Mother's name is required. Please provide a valid name."],
+  },
+  motherContactNo: {
+    type: String,
+    required: [
+      true,
+      "Mother's contact number is required. Please provide a valid number.",
+    ],
+  },
+  motherOccuption: {
+    type: String,
+    required: [
+      true,
+      "Mother's occupation is required. Please provide a valid occupation.",
+    ],
+  },
 });
 
 const localGuardianSchema = new Schema<LocalGuardian>({
-  name: { type: String, required: true },
-  contactNo: { type: String, required: true },
-
-  occupation: { type: String, required: true },
-  // occuption:{type:String,required:true},
-  address: { type: String, required: true },
+  name: {
+    type: String,
+    required: [
+      true,
+      "Local guardian's name is required. Please provide a valid name.",
+    ],
+  },
+  contactNo: {
+    type: String,
+    required: [
+      true,
+      "Local guardian's contact number is required. Please provide a valid number.",
+    ],
+  },
+  occupation: {
+    type: String,
+    required: [
+      true,
+      "Local guardian's occupation is required. Please provide a valid occupation.",
+    ],
+  },
+  address: {
+    type: String,
+    required: [
+      true,
+      "Local guardian's address is required. Please provide a valid address.",
+    ],
+  },
 });
+
 const studentSchema = new Schema<Student>({
-  id: { type: String, required: true, unique: true },
+  id: {
+    type: String,
+    required: [true, "Student ID is required. Please provide a unique ID."],
+    unique: true,
+  },
   name: {
     type: usernameSchema,
-    required: true,
+    required: [true, "Student's name details are required."],
   },
   gender: {
     type: String,
     enum: {
       values: ["male", "female", "other"],
       message:
-        "{VALUE} is not supported.        the gender field can only be one of the following: 'Male','female',or'others'",
-    } /** zoto gula enum ache sob jaygay evabe dite hobe  */,
-    required: true,
+        "{VALUE} is not a valid gender. Please select 'male', 'female', or 'other'.",
+    },
+    required: [true, "Gender is required. Please select a valid option."],
   },
   dateOfBirth: {
     type: String,
   },
-  email: { type: String, required: true },
-  contactNo: { type: String, required: true },
-  emergencyContactNo: { type: String, required: true },
+  email: {
+    type: String,
+    required: [
+      true,
+      "Email is required. Please provide a valid email address.",
+    ],
+    validate: {
+      validator: (value: string) => validator.isEmail(value),
+      message: `{VALUE} eta kaj kore na`,
+    },
+  },
+  contactNo: {
+    type: String,
+    required: [
+      true,
+      "Contact number is required. Please provide a valid number.",
+    ],
+  },
+  emergencyContactNo: {
+    type: String,
+    required: [
+      true,
+      "Emergency contact number is required. Please provide a valid number.",
+    ],
+  },
   bloodGroup: {
     type: String,
-    enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
-    required: true,
+    enum: {
+      values: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+      message:
+        "{VALUE} is not a valid blood group. Please select a valid option.",
+    },
+    required: [
+      true,
+      "Blood group is required. Please select a valid blood group.",
+    ],
   },
-  presentAddress: { type: String, required: true },
-  permanentAddress: { type: String, required: true },
+  presentAddress: {
+    type: String,
+    required: [
+      true,
+      "Present address is required. Please provide a valid address.",
+    ],
+  },
+  permanentAddress: {
+    type: String,
+    required: [
+      true,
+      "Permanent address is required. Please provide a valid address.",
+    ],
+  },
   guardian: {
     type: guardianSchema,
-    required: true,
+    required: [true, "Guardian details are required."],
   },
-  localGuardian: { type: localGuardianSchema, required: true },
-  profileImage: { type: String },
+  localGuardian: {
+    type: localGuardianSchema,
+    required: [true, "Local guardian details are required."],
+  },
+  profileImage: {
+    type: String,
+  },
   isActive: {
     type: String,
-    enum: ["active", "block"],
+    enum: {
+      values: ["active", "block"],
+      message:
+        "{VALUE} is not valid. Status must be either 'active' or 'block'.",
+    },
     default: "active",
-    required: true,
+    required: [true, "Status is required. Please select 'active' or 'block'."],
   },
 });
 
