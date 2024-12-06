@@ -61,6 +61,9 @@ const studentZotValidationSchema = z.object({
   id: z
     .string()
     .nonempty({ message: "Student ID is required. Please provide a unique ID." }),
+  password: z
+    .string().max(20)
+    .nonempty({ message: "password is required. Please provide a unique password." }),
   name: userNameZotValidationSchema,
   gender: z
     .enum(["male", "female", "other"], {
@@ -93,6 +96,7 @@ const studentZotValidationSchema = z.object({
   guardian: guardianZotValidationSchema,
   localGuardian: localGuardianZotValidationSchema,
   profileImage: z.string().optional(),
+  isDeleted:z.boolean(),
   isActive: z
     .enum(["active", "block"], {
       errorMap: () => ({
