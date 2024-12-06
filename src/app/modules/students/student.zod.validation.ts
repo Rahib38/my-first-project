@@ -96,7 +96,7 @@ const studentZotValidationSchema = z.object({
   guardian: guardianZotValidationSchema,
   localGuardian: localGuardianZotValidationSchema,
   profileImage: z.string().optional(),
-  isDeleted:z.boolean(),
+  isDeleted:z.boolean().optional().default(false),
   isActive: z
     .enum(["active", "block"], {
       errorMap: () => ({
