@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from "express";
+import httpStatus from "http-status";
+import sendResponse from "../../utilis/sendResponse";
 import { StudentServices } from "./student.service";
 
 const getAllStudents = async (
@@ -8,7 +10,9 @@ const getAllStudents = async (
 ) => {
   try {
     const result = await StudentServices.getAllStudentsFromDB();
-    res.status(200).json({
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: "student are retrived successfully",
       data: result,
@@ -26,7 +30,9 @@ const getSingleStudent = async (
   try {
     const { studentId } = req.params;
     const result = await StudentServices.getSingleStudentFromDB(studentId);
-    res.status(200).json({
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: "student is retrived successfully",
       data: result,
@@ -44,7 +50,9 @@ const deleteStudent = async (
   try {
     const { studentId } = req.params;
     const result = await StudentServices.deleteStudentFromDB(studentId);
-    res.status(200).json({
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: "student delete is successfully",
       data: result,

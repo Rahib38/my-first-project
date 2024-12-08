@@ -1,5 +1,7 @@
+import httpStatus  from 'http-status';
 import { NextFunction, Request, Response } from "express";
 import { UserService } from "./user.service";
+import sendResponse from "../../utilis/sendResponse";
 
 const createStudent = async (
   req: Request,
@@ -12,11 +14,13 @@ const createStudent = async (
     // const studentValidationData = studentZotValidationSchema.parse(studentData);
     const result = await UserService.createStudentIntoDB(password, studentData);
 
-    res.status(200).json({
+
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
       success: true,
       message: "Student is created successfully",
       data: result,
-    });
+    })
   } catch (err) {
     next(err);
   }
