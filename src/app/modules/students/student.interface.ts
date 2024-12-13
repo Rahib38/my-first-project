@@ -28,6 +28,7 @@ export type TStudent = {
   name: TUserName;
   email: string;
   profileImage?: string;
+  admissionSemester:Types.ObjectId,
   // isActive: "active" | "block";
   gender: "male" | "female" | "other";
   dateOfBirth?: string;
