@@ -47,7 +47,7 @@ const updateAcademicSemester = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Academic Semester are retrived successfully",
+    message: "Academic Semester are update successfully",
     data: result,
   });
 });
