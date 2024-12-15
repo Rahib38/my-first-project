@@ -12,23 +12,19 @@ router.post(
 );
 router.get(
   "/:facultyId",
-  validateRequest(
-    AcademicFacultyValidation.createAcademicFacultyValidationSchema
-  ),
+
   AcademicFacultyControllers.singleGetAcademicFacultys
 );
 router.patch(
   "/:facultyId",
   validateRequest(
-    AcademicFacultyValidation.createAcademicFacultyValidationSchema
+    AcademicFacultyValidation.updateAcademicFacultyValidationSchema
   ),
   AcademicFacultyControllers.updateAcademicFacultys
 );
 router.get(
-  "/:facultyId",
-  validateRequest(
-    AcademicFacultyValidation.createAcademicFacultyValidationSchema
-  ),
+  "/",
+
   AcademicFacultyControllers.getAllAcademicFacultys
 );
 
