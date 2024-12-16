@@ -39,7 +39,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     // create userData
     const newUser = await User.create([userData], { session });
     // create student
-    if (newUser.length) {
+    if (!newUser.length) {
       throw new AppError(httpStatus.BAD_REQUEST, "Failed to create user");
     }
     payload.id = newUser[0].id;
@@ -55,6 +55,8 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   } catch (err) {
     await session.abortTransaction();
     await session.endSession();
+    throw new Error('Failed to create student')
+
   }
 };
 
