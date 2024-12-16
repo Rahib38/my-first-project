@@ -110,7 +110,71 @@ export const createStudentValidationSchema = z.object({
     }),
   }),
 });
+export const updateStudentValidationSchema = z.object({
+  body: z.object({
+    password: z.string().max(20).nonempty({
+      message: "password is required. Please provide a unique password.",
+    }),
+    student: z.object({
+      name: userNameZotValidationSchema.optional(),
+      gender: z
+        .enum(["male", "female", "other"], {
+          errorMap: () => ({
+            message: "Gender must be 'male', 'female', or 'other'.",
+          }),
+        })
+        .optional(),
+      admissionSemester: z.string().optional(),
+      academicDepartment: z.string().optional(),
+      dateOfBirth: z.string().optional(),
+      email: z
+        .string()
+        .email({ message: "Please provide a valid email address." })
+        .optional(),
+      contactNo: z
+        .string()
+        .nonempty({
+          message: "Contact number is required. Please provide a valid number.",
+        })
+        .optional(),
+      emergencyContactNo: z
+        .string()
+        .nonempty({
+          message:
+            "Emergency contact number is required. Please provide a valid number.",
+        })
+        .optional(),
+      bloodGroup: z
+        .enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
+          errorMap: () => ({
+            message:
+              "Blood group must be one of 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', or 'O-'.",
+          }),
+        })
+        .optional(),
+      presentAddress: z
+        .string()
+        .nonempty({
+          message:
+            "Present address is required. Please provide a valid address.",
+        })
+        .optional(),
+      permanentAddress: z
+        .string()
+        .nonempty({
+          message:
+            "Permanent address is required. Please provide a valid address.",
+        })
+        .optional(),
+      guardian: guardianZotValidationSchema.optional(),
+      localGuardian: localGuardianZotValidationSchema.optional(),
+      profileImage: z.string().optional(),
+    }),
+  }),
+});
+
 
 export const studentZotValidations = {
-  studentValidationSchema: createStudentValidationSchema,
+ createStudentValidationSchema,
+ updateStudentValidationSchema
 };
