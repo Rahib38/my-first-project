@@ -79,6 +79,7 @@ export const createStudentValidationSchema = z.object({
         }),
       }),
       admissionSemester: z.string(),
+      academicDepartment: z.string(),
       dateOfBirth: z.string().optional(),
       email: z
         .string()
