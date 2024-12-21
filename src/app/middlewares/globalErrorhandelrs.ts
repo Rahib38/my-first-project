@@ -5,15 +5,16 @@
 import { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
 import config from "../config";
+import AppError from "../Error/AppError";
+import handleCastError from "../Error/handleCastError";
+import handleDuplicateError from "../Error/handleDuplicateError";
 import handleValidationError from "../Error/handleValidationError";
 import handleZodError from "../Error/handleZodError";
 import { TErrorSources } from "../interface/error";
-import handleCastError from "../Error/handleCastError";
-import handleDuplicateError from "../Error/handleDuplicateError";
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  let statusCode = err.statusCode || 500;
-  let message = err.message || "Something went wrong!";
+  let statusCode = 500;
+  let message = "Something went wrong!";
 
   let errorSources: TErrorSources = [
     {
@@ -37,11 +38,28 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
-  }else if (err?.code === 11000) {
+  } else if (err?.code === 11000) {
     const simplifiedError = handleDuplicateError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
+  } else if (err instanceof AppError) {
+    statusCode = err?.statusCode;
+    message = err?.message;
+    errorSources = [
+      {
+        path: "",
+        message: err?.message,
+      },
+    ];
+  } else if (err instanceof Error) {
+    message = err?.message;
+    errorSources = [
+      {
+        path: "",
+        message: err?.message,
+      },
+    ];
   }
   res.status(statusCode).json({
     success: false,
