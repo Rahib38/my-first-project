@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import httpStatus from "http-status";
 import mongoose from "mongoose";
+import QueryBuilders from "../../builder/QueryBuilds";
 import AppError from "../../Error/AppError";
 import { Student } from "../student.model";
 import { User } from "../users/user.model";
-import { TStudent } from "./student.interface";
-import QueryBuilders from "../../builder/QueryBuilds";
 import { studentSearchableFields } from "./student.const";
+import { TStudent } from "./student.interface";
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   // const queryObj = { ...query };
@@ -35,41 +35,56 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   //       path: "academicFaculty",
   //     },
   //   });
-//   let sort = "-createdAt";
-//   if (query.sort) {
-//     sort = query.sort as string;
-//   }
-//   const sortQuery = filterQuery.sort(sort);
-//   let limit = 1;
-//   if (query.limit) {
-//     limit = query.limit as number;
-//   }
-//   let page = 1;
-//   let skip = 0;
-//   if(query.page){
-//     page = query.page as number
-//     skip=(page-1)*limit
-//   }
-//   const paginateQuery = sortQuery.skip(skip)
+  //   let sort = "-createdAt";
+  //   if (query.sort) {
+  //     sort = query.sort as string;
+  //   }
+  //   const sortQuery = filterQuery.sort(sort);
+  //   let limit = 1;
+  //   if (query.limit) {
+  //     limit = query.limit as number;
+  //   }
+  //   let page = 1;
+  //   let skip = 0;
+  //   if(query.page){
+  //     page = query.page as number
+  //     skip=(page-1)*limit
+  //   }
+  //   const paginateQuery = sortQuery.skip(skip)
 
-//   const limitQuery =  paginateQuery.limit(limit);
+  //   const limitQuery =  paginateQuery.limit(limit);
 
-// let fields = '-__v'
-// if(query.fields){
-//   fields=(query.fields as string).split(',').join(' ')
-// }
-// const fieldsQuery= await limitQuery.select(fields)
+  // let fields = '-__v'
+  // if(query.fields){
+  //   fields=(query.fields as string).split(',').join(' ')
+  // }
+  // const fieldsQuery= await limitQuery.select(fields)
 
   // return fieldsQuery;
 
-  const studentQuery = new QueryBuilders(Student.find(),query).search(studentSearchableFields).filter().sort().paginate().fields()
+  const studentQuery = new QueryBuilders(
+    Student.find()
+      .populate("admissionSemester")
+      .populate({
+        path: "academicDepartment",
+        populate: {
+          path: "academicFaculty",
+        },
+      }),
+    query
+  )
+    .search(studentSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
-  const result = await studentQuery.modelQuery
-  return result
+  const result = await studentQuery.modelQuery;
+  return result;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await Student.findOne({ id })
+  const result = await Student.findById( id )
     .populate("admissionSemester")
     .populate({
       path: "academicDepartment",
@@ -100,7 +115,7 @@ const updateStudentFromDB = async (id: string, payload: Partial<TStudent>) => {
       modifiedUpdateData[`localGuardian.${key}`] = value;
     }
   }
-  const result = await Student.findOneAndUpdate({ id }, modifiedUpdateData, {
+  const result = await Student.findByIdAndUpdate( id , modifiedUpdateData, {
     new: true,
     runValidators: true,
   });
@@ -111,16 +126,17 @@ const deleteStudentFromDB = async (id: string) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-    const deletedStudent = await Student.findOneAndUpdate(
-      { id },
+    const deletedStudent = await Student.findByIdAndUpdate(
+       id ,
       { isDeleted: true },
       { new: true, session }
     );
     if (!deletedStudent) {
       throw new AppError(httpStatus.BAD_REQUEST, "Failed to delete student");
     }
-    const deletedUser = await User.findOneAndUpdate(
-      { id },
+    const userId=deletedStudent.user
+    const deletedUser = await User.findByIdAndUpdate(
+      userId,
       { isDeleted: true },
       { new: true, session }
     );
