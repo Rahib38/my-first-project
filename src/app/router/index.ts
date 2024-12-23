@@ -2,10 +2,10 @@ import { Router } from "express";
 import { AcademicDepartmentsRoutes } from "../modules/academicDepartment/academicDepartment.route";
 import { AcademicFacultyRoutes } from "../modules/academicFaculty/academicFaculty.route";
 import { AcademicSemesterRoutes } from "../modules/academicSemester/academicSemester.route";
+import { AdminRoutes } from "../modules/admin/admin.route";
+import { FacultyRoutes } from "../modules/faculty/faculty.route";
 import { StudentRouter } from "../modules/students/student.route";
 import { UserRoutes } from "../modules/users/user.routes";
-import { FacultyRoutes } from "../modules/faculty/faculty.route";
-import { AdminRoutes } from "../admin/admin.route";
 
 const router = Router();
 

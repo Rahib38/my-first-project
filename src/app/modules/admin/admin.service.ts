@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import httpStatus from 'http-status';
-import mongoose from 'mongoose';
+import httpStatus from "http-status";
+import mongoose from "mongoose";
 
-import { AdminSearchableFields } from './admin.constant';
-import { TAdmin } from './admin.interface';
-import { Admin } from './admin.model';
-import QueryBuilders from '../builder/QueryBuilds';
-import AppError from '../Error/AppError';
-import { User } from '../modules/users/user.model';
+import QueryBuilders from "../../builder/QueryBuilds";
+import AppError from "../../Error/AppError";
+import { User } from "../users/user.model";
+import { AdminSearchableFields } from "./admin.constant";
+import { TAdmin } from "./admin.interface";
+import { Admin } from "./admin.model";
 
 const getAllAdminsFromDB = async (query: Record<string, unknown>) => {
   const adminQuery = new QueryBuilders(Admin.find(), query)
@@ -55,11 +55,11 @@ const deleteAdminFromDB = async (id: string) => {
     const deletedAdmin = await Admin.findByIdAndUpdate(
       id,
       { isDeleted: true },
-      { new: true, session },
+      { new: true, session }
     );
 
     if (!deletedAdmin) {
-      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete student');
+      throw new AppError(httpStatus.BAD_REQUEST, "Failed to delete student");
     }
 
     // get user _id from deletedAdmin
@@ -68,11 +68,11 @@ const deleteAdminFromDB = async (id: string) => {
     const deletedUser = await User.findOneAndUpdate(
       userId,
       { isDeleted: true },
-      { new: true, session },
+      { new: true, session }
     );
 
     if (!deletedUser) {
-      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete user');
+      throw new AppError(httpStatus.BAD_REQUEST, "Failed to delete user");
     }
 
     await session.commitTransaction();

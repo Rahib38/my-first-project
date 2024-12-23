@@ -1,9 +1,8 @@
-import httpStatus from 'http-status';
+import httpStatus from "http-status";
 
-
-import { AdminServices } from './admin.service';
-import catchAsync from '../utilis/catchAsync';
-import sendResponse from '../utilis/sendResponse';
+import catchAsync from "../../utilis/catchAsync";
+import sendResponse from "../../utilis/sendResponse";
+import { AdminServices } from "./admin.service";
 
 const getSingleAdmin = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -12,7 +11,7 @@ const getSingleAdmin = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admin is retrieved succesfully',
+    message: "Admin is retrieved succesfully",
     data: result,
   });
 });
@@ -23,7 +22,7 @@ const getAllAdmins = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admins are retrieved succesfully',
+    message: "Admins are retrieved succesfully",
     data: result,
   });
 });
@@ -36,7 +35,7 @@ const updateAdmin = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admin is updated succesfully',
+    message: "Admin is updated succesfully",
     data: result,
   });
 });
@@ -48,7 +47,7 @@ const deleteAdmin = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admin is deleted succesfully',
+    message: "Admin is deleted succesfully",
     data: result,
   });
 });
