@@ -121,8 +121,8 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     user: {
       type: Schema.Types.ObjectId,
       required: [true, "user id is required"],
-      unique:true,
-      ref:"user"
+      unique: true,
+      ref: "user",
     },
     // password: {
     //   type: String,
@@ -209,9 +209,9 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     profileImage: {
       type: String,
     },
-    admissionSemester:{
+    admissionSemester: {
       type: Schema.Types.ObjectId,
-      ref:"AcademicSemester",
+      ref: "AcademicSemester",
     },
     // isActive: {
     //   type: String,
@@ -231,8 +231,8 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       default: false,
     },
     academicDepartment: {
-    type:Schema.Types.ObjectId,
-    ref:"AcademicDepartmentModel"
+      type: Schema.Types.ObjectId,
+      ref: "AcademicDepartmentModel",
     },
   },
   {
@@ -243,10 +243,8 @@ const studentSchema = new Schema<TStudent, StudentModel>(
 );
 // virtual
 studentSchema.virtual("fullName").get(function () {
-  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
+  return `${this?.name?.firstName} ${this?.name?.middleName} ${this?.name?.lastName}`;
 });
-
-
 
 // query middleware
 studentSchema.pre("find", function (next) {
