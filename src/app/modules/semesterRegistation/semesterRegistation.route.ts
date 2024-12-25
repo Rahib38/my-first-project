@@ -24,3 +24,4 @@ router.patch(
   semesterRegistrationController.updateSemesterRegistration
 );
 router.get("/", semesterRegistrationController.getAllSemesterRegistration);
+export const SemesterRegistrationRoute = router;
