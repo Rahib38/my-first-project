@@ -11,3 +11,16 @@ router.post(
   ),
   semesterRegistrationController.createSemesterRegistration
 );
+
+router.get(
+  "/:id",
+  semesterRegistrationController.getSingleSemesterRegistration
+);
+router.patch(
+  "/:id",
+  validateRequest(
+    SemesterRegistrationValidation.updateSemesterRegistrationValidationSchema
+  ),
+  semesterRegistrationController.updateSemesterRegistration
+);
+router.get("/", semesterRegistrationController.getAllSemesterRegistration);
