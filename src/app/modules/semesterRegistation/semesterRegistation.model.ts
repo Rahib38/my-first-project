@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import { TsemesterRegistration } from "./semesterRegistation.route";
+
 import { SemesterRegistrationStatus } from "./SemesterRegistration.constant";
+import { TsemesterRegistration } from "./semesterRegistation.interface";
 
 const semesterRegistrationSchema = new mongoose.Schema<TsemesterRegistration>(
   {

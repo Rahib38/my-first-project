@@ -1,10 +1,13 @@
-import { Types } from "mongoose"
+import express from "express";
+import validateRequest from "../../utilis/validateRequest";
+import { semesterRegistrationController } from "./semesterRegistation.controller";
+import { SemesterRegistrationValidation } from "./semesterRegistation.validation";
+const router = express.Router();
 
-export type TsemesterRegistration={
-    academicSemester:Types.ObjectId;
-    status:'UPCOMING'|"ONGOING"|"ENDED";
-    startDate:Date;
-    endDate:Date;
-    minCredit:number;
-    maxCredit:number
-}
+router.post(
+  "/create-semester-registration",
+  validateRequest(
+    SemesterRegistrationValidation.createSemesterRegistrationValidationSchema
+  ),
+  semesterRegistrationController.createSemesterRegistration
+);
